@@ -52,18 +52,26 @@ return finalObj.slice(0,5)
 
 function getMostPopularAuthors(books, authors) {
   let highestFreq = [];
-    for (let i = 0; i < books.length; i++) {
-      //Using the destructuring technique to obtain authorId and borrows key
-      let { authorId, borrows } = books[i];
-      //borrows length signifies how often a particular author's book was borrowed
-      let borrowCount = Object.values(borrows).length;
-      //matching author id to books id
-      let author = authors.find((writer) => writer.id === authorId);
-      let authArr = Object.values(author.name);
-      let name = authArr.join(" ");
-      let resultObj = { name: name, count: borrowCount };
-      highestFreq.push(resultObj);
-    }
+  let neededArrays = ["authorId", "borrows"]
+  let authorId = Object.keys(books)
+  .filter(key => neededArrays.includes(key))
+  .reduce((obj, key) => {
+    obj[key] = books[key];
+    return obj;
+  }, {});
+  for (let i = 0; i < books.length; i++) {
+    //Using the destructuring technique to obtain authorId and borrows key
+    const { authorId, borrows } = books[i];
+    //borrows length signifies how often a particular author's book was borrowed
+    const borrowCount = Object.values(borrows).length;
+    //matching author id to books id
+    const author = authors.find((writer) => writer.id === authorId);
+    const authArr = Object.values(author.name);
+    const name = authArr.join(" ");
+    const resultObj = { name: name, count: borrowCount };
+    highestFreq.push(resultObj);
+  }
+  //sort the object by the count
     //sort the object by the count
     let finalAnswer = highestFreq.sort((authA, authB) => (authA.count > authB.count ? -1 : 1)).slice(0, 5);
     return finalAnswer;
