@@ -22,8 +22,7 @@ function getTotalNumberOfBorrows(account, books) {
       }
     }return counter;
 }
-
-function getBooksPossessedByAccount(account, books, authors) {
+function borrAccId(books, account){
   let holdArr = [];
 //going to search the borrows array for the account.id and to make sure it hasn't been returned
 books.map(booksReturned=>{
@@ -31,12 +30,18 @@ books.map(booksReturned=>{
     holdArr.push(booksReturned);
   }
   });
-  //going to filter for authorId
-holdArr.map(booksReturned=>{
-  let author = authors.find(name=> name.id === booksReturned.authorId);
-  booksReturned['author'] = author;
-});
-return holdArr;
+  return holdArr
+}
+function getBooksPossessedByAccount(account, books, authors) {
+
+    //going to search the borrows array for the account.id and to make sure it hasn't been returned
+    let holdArr = borrAccId(books, account);
+      //going to filter for authorId
+    holdArr.map(booksReturned=>{
+      let author = authors.find(name=> name.id === booksReturned.authorId);
+      booksReturned['author'] = author;
+    });
+    return holdArr;
 }
 
 module.exports = {
